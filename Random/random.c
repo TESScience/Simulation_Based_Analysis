@@ -8,6 +8,7 @@
 #include "calrissian.h"
 #include "squarissian.h"
 #include "squafib.h"
+#include "warpspeed.h"
 
 void usage( void )
 {
@@ -17,6 +18,7 @@ void usage( void )
 	fprintf( stderr, "calrissian\n" );
 	fprintf( stderr, "squarissian\n" );
 	fprintf( stderr, "squafib\n" );
+	fprintf( stderr, "warpspeed\n" );
 	exit( -1 );
 }
 
@@ -29,7 +31,8 @@ int main( int argc, char *argv[] )
 	int forever = 1;
 	int i;
 	struct timeval tv;
-	enum { additive, calrissian, squarissian, squafib } gen = additive;
+	enum { additive, calrissian, squarissian, squafib, warpspeed } 
+		gen = additive;
 
 	(void) gettimeofday( &tv, NULL );
 	
@@ -72,6 +75,11 @@ int main( int argc, char *argv[] )
 			gen = squafib;
 			continue;
 		}
+		
+		if( strcmp( *argv, "--warpspeed" ) == 0 ) {
+			gen = warpspeed;
+			continue;
+		}
 
 		usage();
 	}
@@ -91,6 +99,10 @@ int main( int argc, char *argv[] )
 		
 		case squafib:
 		squafib_srand_long( seed );
+		break;
+		
+		case warpspeed:
+		warpspeed_srand( (int) seed );
 		break;
 	}
 
@@ -112,6 +124,10 @@ int main( int argc, char *argv[] )
 			
 			case squafib:
 			rnum = squafib_urand();
+			break;
+			
+			case warpspeed:
+			rnum = warpspeed_urand();
 			break;
 		}
 		

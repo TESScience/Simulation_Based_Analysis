@@ -1,4 +1,4 @@
-LIBOBJS=calrissian.o randa.o squafib.o squarissian.o
+LIBOBJS=calrissian.o randa.o squafib.o squarissian.o warpspeed.o
 
 random : random.o $(LIBOBJS)
 	$(CC) $(CFLAGS) $^ -o $@
