@@ -102,7 +102,7 @@ int main( int argc, char *argv[] )
 		break;
 		
 		case warpspeed:
-		warpspeed_srand( (int) seed );
+		warpspeed_seed( &seed, sizeof seed );
 		break;
 	}
 

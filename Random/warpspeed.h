@@ -1,15 +1,10 @@
 
-/* macros for fast random number generator */
+#ifndef WARPSPEED_H
+#define WARPSPEED_H
 
-#ifndef THREADRAND_H
-#define THREADRAND_H
+#include <stdint.h>
 
-extern unsigned *_warpspeed_rnbp;
-extern short _warpspeed_rncnt;
-extern unsigned _warpspeed_nrnbuf();
+extern void warpspeed_seed( void *s, unsigned size );
+extern uint32_t warpspeed_urand( void );
 
-extern void warpspeed_srand( int new );
-extern int warpspeed_rand( void );
-extern unsigned warpspeed_urand( void );
-
-#endif /* ndef THREADRAND_H */
+#endif /* ndef WARPSPEED_H */
