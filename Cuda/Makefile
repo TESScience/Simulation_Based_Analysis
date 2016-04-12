@@ -3,15 +3,17 @@ CUDA_BIN_DIR=$(CUDA_DIR)/bin
 CUDA_LIB_DIR=$(CUDA_DIR)/lib64
 CFLAGS=-Wall
 NVCC=$(CUDA_BIN_DIR)/nvcc --compiler-options $(CFLAGS)
+OBJECTS=random.o main.o
+HEADERS=random.h warpspeed.h
 
 .PHONY: all clean
 
 all: random
 
-%.o: %.cu random.h
+%.o: %.cu $(HEADERS)
 	$(NVCC) -o $@ -c $<
 
-random: random.o main.o
+random: $(OBJECTS)
 	$(NVCC) $^ -o $@
 
 clean:
