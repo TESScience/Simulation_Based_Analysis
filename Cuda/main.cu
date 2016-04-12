@@ -3,8 +3,12 @@
 int main( int argc, char* argv[] )
 {
     // Size of vectors
-    int n = 100000;
-    size_t bytes = n*sizeof(double);
+    const int n = 100000;
+    const size_t bytes = n*sizeof(double);
+    // Number of threads in each thread block
+    const int blockSize = 1024;
+    // Number of thread blocks in grid
+    const int gridSize = (int)ceil((float)n/blockSize);
  
     // Host input vectors
     double *h_a = (double*) alloca(bytes);
@@ -34,13 +38,6 @@ int main( int argc, char* argv[] )
     cudaMemcpy( d_a, h_a, bytes, cudaMemcpyHostToDevice);
     cudaMemcpy( d_b, h_b, bytes, cudaMemcpyHostToDevice);
  
-    int blockSize, gridSize;
- 
-    // Number of threads in each thread block
-    blockSize = 1024;
- 
-    // Number of thread blocks in grid
-    gridSize = (int)ceil((float)n/blockSize);
  
     // Execute the kernel
     vecAdd<<<gridSize, blockSize>>>(d_a, d_b, d_c, n);
