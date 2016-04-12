@@ -1,3 +1,5 @@
+#include "cuda_utils.h"
+
 /**
  * Get the device count for CUDA boards.
  */
