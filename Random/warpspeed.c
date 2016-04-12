@@ -2,21 +2,6 @@
 #include "warpspeed.h"
 #include <string.h>
 
-
-/* 
-
-The following constants define a shift register representing a primitive pentanomial mod
-2. For CUDA, the tap values have to be >= the size of a thread block so we don't need
-to compute serially. LENGTH must be twice the size of the thread block. For efficiency,
-the thread block size should equal the hardware warp size.
-
-*/
-
-#define LENGTH 64
-#define TAP1 32
-#define TAP2 43
-#define TAP3 57
-
 /*
 
 For the serial implementation we need to store the currently active block of pseudo-random 
@@ -24,10 +9,8 @@ numbers in an array, but it would just be a register per thread in CUDA.
 
 */
 
-#define BLOCK (LENGTH/2)
-
 static uint32_t history[ LENGTH ];
-static uint32_t current[ BLOCK ];
+static uint32_t current[ RANDOM_FRAME_SIZE ];
 static int idx;
 
 /*
@@ -45,16 +28,16 @@ uint32_t warpspeed_urand( void )
 	
 	if( idx < 0 ) {	// refresh the current block
 		
-		(void) memcpy( history + BLOCK, history, BLOCK * sizeof(uint32_t));
-		(void) memcpy( history, current, BLOCK * sizeof(uint32_t));
+		(void) memcpy( history + RANDOM_FRAME_SIZE, history, RANDOM_FRAME_SIZE * sizeof(uint32_t));
+		(void) memcpy( history, current, RANDOM_FRAME_SIZE * sizeof(uint32_t));
 		
-		for( i = 0; i < BLOCK; i += 1 ) {
-			current[i] = history[ i + TAP1 - BLOCK ]
-				+ history[ i + TAP2 - BLOCK ]
-				+ history[ i + TAP3 - BLOCK ]
-				+ history[ i + LENGTH - BLOCK ];
+		for( i = 0; i < RANDOM_FRAME_SIZE; i += 1 ) {
+			current[i] = history[ i + TAP1 - RANDOM_FRAME_SIZE ]
+				+ history[ i + TAP2 - RANDOM_FRAME_SIZE ]
+				+ history[ i + TAP3 - RANDOM_FRAME_SIZE ]
+				+ history[ i + LENGTH - RANDOM_FRAME_SIZE ];
 		}
-		idx = BLOCK - 1;
+		idx = RANDOM_FRAME_SIZE - 1;
 	}
 	
 	return current[ idx-- ];
