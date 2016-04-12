@@ -1,4 +1,5 @@
 #include "random.h"
+#include "cuda_utils.h"
  
 int main( int argc, char* argv[] )
 {
@@ -9,6 +10,10 @@ int main( int argc, char* argv[] )
     const int blockSize = 1024;
     // Number of thread blocks in grid
     const int gridSize = (int)ceil((float)n/blockSize);
+
+    // Get the device count
+    const int number_of_devices = cuda_device_count();
+    printf("Device Count: %i\n", number_of_devices);
  
     // Host input vectors
     double *h_a = (double*) alloca(bytes);
