@@ -15,8 +15,11 @@ int main( int argc, char* argv[] )
     const int gridSize = (int)ceil((float)n/blockSize);
 
     // Get the device count
-    const int number_of_devices = cuda_device_count();
-    printf("Device Count: %i\n", number_of_devices);
+    printf("Device Count: %i\n", cuda_device_count() );
+
+    int i;
+    for(i = 0; i < cuda_device_count(); i++ )
+        printf("Warp Size for CUDA device %i: %i\n", i, warp_size(i));
  
     // Host input vectors
     double *h_a = (double*) alloca(bytes);
@@ -36,7 +39,6 @@ int main( int argc, char* argv[] )
     cudaMalloc(&d_c, bytes);
  
     // Initialize vectors on host
-    int i;
     for(i = 0; i < n; i++ ) {
         h_a[i] = sin(i)*sin(i);
         h_b[i] = cos(i)*cos(i);
