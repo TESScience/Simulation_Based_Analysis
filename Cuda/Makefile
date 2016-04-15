@@ -1,4 +1,4 @@
-CUDA_DIR=/usr/local/cuda-7.5
+CUDA_DIR=/usr/local/cuda
 CUDA_BIN_DIR=$(CUDA_DIR)/bin
 CUDA_LIB_DIR=$(CUDA_DIR)/lib64
 CFLAGS=-Wall

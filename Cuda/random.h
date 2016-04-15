@@ -1,7 +1,5 @@
 #pragma once
 #include <stdint.h>
 
-// CUDA kernel. Each thread takes care of one element of c
 __global__ void warspeed_rand(uint32_t *random_numbers, int n, int rounds);
-__global__ void vecAdd(double *a, double *b, double *c, int n);
-int main( int argc, char* argv[] );
+__global__ void vectorAdd(const float *a, const float *b, float *c, const int numElements);
