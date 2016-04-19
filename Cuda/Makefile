@@ -4,7 +4,7 @@ CUDA_LIB_DIR=$(CUDA_DIR)/lib64
 CFLAGS=-Wall
 NVCC=$(CUDA_BIN_DIR)/nvcc --compiler-options $(CFLAGS)
 
-OBJECTS=random.o main.o cuda_utils.o
+OBJECTS=main.o random.o cuda_utils.o
 HEADERS=random.h warpspeed.h
 
 .PHONY: all clean

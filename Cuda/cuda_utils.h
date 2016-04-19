@@ -1,4 +1,4 @@
 #pragma once
 
 int cuda_device_count();
-int warp_size(const int i);
+int max_threads_per_block(const int device_idx);

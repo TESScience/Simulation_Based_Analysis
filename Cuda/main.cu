@@ -1,18 +1,22 @@
 #include <stdio.h>
 #include "random.h"
+#include "cuda_utils.h"
 #include <cuda_runtime.h>
 
 /**
  * Host main routine
  */
-int main( int argc, char* argv[] )
+int main(void)
 {
+    // TODO: Use a command line flag
+    const int device_idx = 0;
+
     // Error code to check return values for CUDA calls
     cudaError_t err = cudaSuccess;
 
     // Print the vector length to be used, and compute its size
     const int numElements = 50000;
-    size_t size = numElements * sizeof(float);
+    const size_t size = numElements * sizeof(float);
     printf("[Vector addition of %d elements]\n", numElements);
 
     // Allocate the host input vector A
@@ -34,8 +38,8 @@ int main( int argc, char* argv[] )
     // Initialize the host input vectors
     for (int i = 0; i < numElements; ++i)
     {
-        h_A[i] = rand()/(float)RAND_MAX;
-        h_B[i] = rand()/(float)RAND_MAX;
+        h_A[i] = sin(i)*sin(i);
+        h_B[i] = cos(i)*cos(i);
     }
 
     // Allocate the device input vector A
@@ -88,10 +92,10 @@ int main( int argc, char* argv[] )
     }
 
     // Launch the Vector Add CUDA Kernel
-    int threadsPerBlock = 256;
-    int blocksPerGrid =(numElements + threadsPerBlock - 1) / threadsPerBlock;
+    const int threadsPerBlock = max_threads_per_block(device_idx);
+    const int blocksPerGrid =(numElements + threadsPerBlock - 1) / threadsPerBlock;
     printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid, threadsPerBlock);
-    vectorAdd<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C, numElements);
+    vectorAdd<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C);
     err = cudaGetLastError();
 
     if (err != cudaSuccess)

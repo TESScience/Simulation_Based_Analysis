@@ -1,7 +1,7 @@
 #include "random.h"
 #include "warpspeed.h"
 
-__global__ void vectorAdd(const float *A, const float *B, float *C, const int numElements)
+__global__ void vectorAdd(const float *A, const float *B, float *C)
 {
     const int id = threadIdx.x + 
                    threadIdx.y * blockDim.x + 
@@ -12,10 +12,10 @@ __global__ void vectorAdd(const float *A, const float *B, float *C, const int nu
  
 __global__ void warpspeed_rand(uint32_t * random_data)
 {
-    // Get our global thread ID
-    int id = threadIdx.x + 
-              threadIdx.y * blockDim.x + 
-              threadIdx.z * blockDim.x * blockDim.y;
+    const int id = threadIdx.x + 
+                   threadIdx.y * blockDim.x + 
+                   threadIdx.z * blockDim.x * blockDim.y;
+    //const int warpid = id / warpSize;
     uint32_t temp;
 
     temp = random_data[id];
